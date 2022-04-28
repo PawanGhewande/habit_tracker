@@ -13,8 +13,15 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
+  #default icon pack
   cupertino_icons: ^1.0.2
+  #local db
+  hive: ^2.1.0
+  #state management pkg
+  provider: ^6.0.2
+  #horizontal calendar
+  date_picker_timeline: ^1.2.3
+  
 
 dev_dependencies:
   flutter_test:
