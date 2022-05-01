@@ -1,6 +1,7 @@
 import 'package:date_picker_timeline/date_picker_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:habit_tracker/modules/dashboard/presentation/widget/habit_list_tile.dart';
+import 'package:habit_tracker/modules/habit_details/presentation/view/habit_details_view.dart';
 
 class DashboardView extends StatelessWidget {
   const DashboardView({Key? key}) : super(key: key);
@@ -123,9 +124,18 @@ class DashboardView extends StatelessWidget {
                 child: ListView.builder(
                   itemCount: 6,
                   itemBuilder: (BuildContext context, int index) {
-                    return const HabitListTitle(
-                      fill: 10,
-                      color: Colors.deepPurple,
+                    return InkWell(
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => const HabitDetailsView(),
+                          ),
+                        );
+                      },
+                      child: const HabitListTitle(
+                        fill: 10,
+                        color: Colors.deepPurple,
+                      ),
                     );
                   },
                 ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:habit_tracker/modules/dashboard/presentation/widget/progress_widget.dart';
+import 'package:habit_tracker/modules/habit_details/presentation/view/habit_details_view.dart';
 
 class HabitListTitle extends StatelessWidget {
   const HabitListTitle({Key? key, this.color = Colors.red, this.fill = 0})
