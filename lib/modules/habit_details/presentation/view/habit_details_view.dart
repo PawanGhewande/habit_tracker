@@ -8,6 +8,7 @@ class HabitDetailsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey.shade100,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(15.0),
@@ -121,11 +122,11 @@ class HabitDetailsView extends StatelessWidget {
                 ],
               ),
               const SizedBox(
-                height: 15,
+                height: 8,
               ),
               const Divider(),
               const SizedBox(
-                height: 15,
+                height: 12,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
