@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:habit_tracker/modules/dashboard/presentation/widget/progress_widget.dart';
-import 'package:habit_tracker/modules/habit_details/presentation/widget/circle_progress.dart';
-import 'package:habit_tracker/modules/habit_details/presentation/widget/custom_linne_chart.dart';
+import '/modules/dashboard/presentation/widget/progress_widget.dart';
+import '/modules/habit_details/presentation/widget/clipper.dart';
 
 class HabitDetailsView extends StatelessWidget {
   const HabitDetailsView({Key? key}) : super(key: key);
@@ -121,6 +120,9 @@ class HabitDetailsView extends StatelessWidget {
                   )
                 ],
               ),
+              const SizedBox(
+                height: 15,
+              ),
               const Divider(),
               const SizedBox(
                 height: 15,
@@ -185,11 +187,37 @@ class HabitDetailsView extends StatelessWidget {
                 ],
               ),
               Expanded(
-                child: CustomPaint(
-                  child: Builder(builder: (context) {
-                    return Container();
-                  }),
-                  painter: CurveBackground(color: Colors.red),
+                child: Stack(
+                  children: [
+                    Positioned(
+                      bottom: 0,
+                      child: ClipPath(
+                        clipper: MyWaveClipper(),
+                        child: Opacity(
+                          opacity: 0.5,
+                          child: Container(
+                            color: Colors.redAccent,
+                            width: 900,
+                            height: 200,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 0,
+                      child: ClipPath(
+                        clipper: MyWaveClipper(),
+                        child: Opacity(
+                          opacity: 0.5,
+                          child: Container(
+                            color: Colors.redAccent,
+                            width: 900,
+                            height: 200,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
