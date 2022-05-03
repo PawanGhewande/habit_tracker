@@ -1,6 +1,6 @@
 import 'package:date_picker_timeline/date_picker_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:habit_tracker/modules/add_habit/presentation/view/add_habit_page.dart';
 import 'package:habit_tracker/modules/dashboard/presentation/widget/habit_list_tile.dart';
 import 'package:habit_tracker/modules/habit_details/presentation/view/habit_details_view.dart';
 
@@ -9,13 +9,6 @@ class DashboardView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(
-      SystemUiOverlayStyle(
-        statusBarColor: Colors.grey.shade100,
-        statusBarBrightness: Brightness.light,
-      ),
-    );
-
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
       body: SafeArea(
@@ -40,11 +33,18 @@ class DashboardView extends StatelessWidget {
                     ),
                   ),
                   const Spacer(),
-                  const CircleAvatar(
-                    backgroundColor: Colors.deepPurple,
-                    child: Icon(
-                      Icons.add,
-                      color: Colors.white,
+                  InkWell(
+                    child: const CircleAvatar(
+                      backgroundColor: Colors.deepPurple,
+                      child: Icon(
+                        Icons.add,
+                        color: Colors.white,
+                      ),
+                    ),
+                    onTap: () => Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => AddHabitPage(),
+                      ),
                     ),
                   )
                 ],
