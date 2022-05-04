@@ -47,7 +47,6 @@ class AddHabitController extends ChangeNotifier {
           id: 0,
         ),
       );
-      print('Saved.');
       successDialog(context);
     }
   }

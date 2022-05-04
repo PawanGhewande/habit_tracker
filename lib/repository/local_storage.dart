@@ -38,6 +38,19 @@ class LocalStorage extends _$LocalStorage {
           visible: Value(data.visible),
         ),
       );
+
+  ///queries for graph
+  Future<List<HabitData>> getHabits(DateTime date) async {
+    return (select(habit)..where((row) => row.visible.equals(true))
+        // ..where((row) {
+        //   final rd = row.date;
+        //   return rd.year.equals(date.year) &
+        //       rd.month.equals(date.month) &
+        //       rd.day.equals(date.day);
+        // })
+        )
+        .get();
+  }
 }
 
 LazyDatabase _openConnection() {

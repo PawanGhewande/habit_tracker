@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:habit_tracker/modules/dashboard/presentation/widget/progress_widget.dart';
 
 class HabitListTitle extends StatelessWidget {
-  const HabitListTitle({Key? key, this.color = Colors.red, this.fill = 0})
+  const HabitListTitle(
+      {Key? key, this.color = Colors.red, this.fill = 0, required this.title})
       : super(key: key);
   final Color color;
   final int fill;
+  final String title;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -32,7 +34,7 @@ class HabitListTitle extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Habit Title',
+                    title,
                     style: Theme.of(context)
                         .textTheme
                         .headline6
