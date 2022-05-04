@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:habit_tracker/repository/local_storage.dart';
+import 'package:provider/provider.dart';
 
 import 'modules/dashboard/presentation/view/dashboard_view.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    Provider<LocalStorage>(
+      create: (_) => LocalStorage(),
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
