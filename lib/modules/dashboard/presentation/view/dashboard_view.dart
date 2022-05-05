@@ -176,8 +176,8 @@ class DashboardView extends StatelessWidget {
                                 },
                                 child: HabitListTitle(
                                   fill: 10,
-                                  color: Colors.deepPurple,
-                                  title: snapshot.data?[index].name ?? 'NA',
+                                  color: controller.randomColor ?? Colors.red,
+                                  habit: snapshot.data![index],
                                 ),
                               );
                             },

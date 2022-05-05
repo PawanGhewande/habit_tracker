@@ -39,6 +39,45 @@ class LocalStorage extends _$LocalStorage {
         ),
       );
 
+  //insert new habit
+  Future insertHabitDetails(int id) => into(habitDetails).insert(
+        HabitDetailsCompanion.insert(
+          habitId: id,
+          date: Value(
+            DateTime.now(),
+          ),
+          visible: const Value(true),
+        ),
+      );
+
+  ///delete todays entry
+  Future deleteHabitDetails(int id) {
+    // delete the oldest nine tasks
+    return (delete(habitDetails)
+          ..where((t) => t.id.equals(id))
+          ..where((row) {
+            final rd = row.date;
+            final today = DateTime.now();
+            return rd.year.equals(today.year) &
+                rd.month.equals(today.month) &
+                rd.day.equals(today.day);
+          }))
+        .go();
+  }
+
+  ///todays habit completed
+  Future<HabitDetail> isTodayCompleted(int id, DateTime date) async {
+    return (select(habitDetails)
+          ..where((row) => row.id.equals(id))
+          ..where((row) {
+            final rd = row.date;
+            return rd.year.equals(date.year) &
+                rd.month.equals(date.month) &
+                rd.day.equals(date.day);
+          }))
+        .getSingle();
+  }
+
   ///queries for graph
   Future<List<HabitData>> getHabits(DateTime date) async {
     return (select(habit)..where((row) => row.visible.equals(true))
