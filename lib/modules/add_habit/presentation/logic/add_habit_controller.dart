@@ -14,7 +14,7 @@ class AddHabitController extends ChangeNotifier {
     DayInWeek("Mon"),
     DayInWeek("Tue"),
     DayInWeek("Wed"),
-    DayInWeek("Thu"),
+    DayInWeek("Thu"), 
     DayInWeek("Fri"),
     DayInWeek("Sat"),
   ];
