@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -8,16 +9,26 @@ class DashboardController extends ChangeNotifier {
   late final LocalStorage _storage;
 
   BuildContext context;
+  int countOfHabits = 0;
+
+  DateTime selectedDate = DateTime.now();
 
   DashboardController(this.context) {
     _storage = Provider.of<LocalStorage>(context, listen: false);
   }
 
   Future<List<HabitData>> getHabits() async {
-    return await _storage.getHabits(DateTime.now());
+    var list = await _storage.getHabits();
+    countOfHabits = list.length;
+    return list;
   }
 
   Color? get randomColor =>
       Colors.primaries[Random().nextInt(Colors.primaries.length)]
           [Random().nextInt(9) * 100];
+
+  void onChange(date) {
+    selectedDate = date;
+    notifyListeners();
+  }
 }

@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:habit_tracker/modules/dashboard/presentation/widget/habit_list_tile_controller.dart';
 import 'package:habit_tracker/modules/dashboard/presentation/widget/progress_widget.dart';
@@ -5,22 +6,23 @@ import 'package:habit_tracker/repository/local_storage.dart';
 import 'package:provider/provider.dart';
 
 class HabitListTitle extends StatelessWidget {
-  const HabitListTitle({
-    Key? key,
-    this.color = Colors.red,
-    this.fill = 0,
-    required this.habit,
-  }) : super(key: key);
+  const HabitListTitle(
+      {Key? key,
+      this.color = Colors.red,
+      required this.habit,
+      required this.selectedDate})
+      : super(key: key);
 
   final Color color;
-  final int fill;
   final HabitData habit;
+  final DateTime selectedDate;
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (_) => HabitListTitleController(
         context: context,
         habit: habit,
+        selectedDate: selectedDate,
       ),
       child: Consumer<HabitListTitleController>(
         builder: (BuildContext context, HabitListTitleController controller,
@@ -63,7 +65,7 @@ class HabitListTitle extends StatelessWidget {
                             ?.apply(fontSizeFactor: 1.1),
                       ),
                       Text(
-                        '5 from 7 this week',
+                        '${controller.countOfCompleteInWeek} from ${habit.days} this week',
                         style: Theme.of(context)
                             .textTheme
                             .subtitle1
@@ -79,11 +81,16 @@ class HabitListTitle extends StatelessWidget {
                   const EdgeInsets.symmetric(vertical: 13.0, horizontal: 18),
               child: CustomPaint(
                 child: Builder(builder: (context) {
+                  print(
+                      'PERCENT :: ${(((controller.countOfCompleteInWeek * 100) / habit.days) * 0.1).toInt()}');
                   return Container();
                 }),
                 painter: CustomerProgressWidget(
                   color: color,
-                  fill: fill,
+                  fill:
+                      (((controller.countOfCompleteInWeek * 100) / habit.days) *
+                              0.1)
+                          .toInt(),
                 ),
               ),
             ),
@@ -95,4 +102,10 @@ class HabitListTitle extends StatelessWidget {
       ),
     );
   }
+
+  // @override
+  // void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+  //   super.debugFillProperties(properties);
+  //   properties.add(DiagnosticsProperty<DateTime>('selectedDate', selectedDate));
+  // }
 }

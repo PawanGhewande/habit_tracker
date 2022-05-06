@@ -40,56 +40,62 @@ class LocalStorage extends _$LocalStorage {
       );
 
   //insert new habit
-  Future insertHabitDetails(int id) => into(habitDetails).insert(
+  Future insertHabitDetails(int id, DateTime date) => into(habitDetails).insert(
         HabitDetailsCompanion.insert(
           habitId: id,
-          date: Value(
-            DateTime.now(),
-          ),
+          date: Value(minToday(date).add(const Duration(minutes: 1))),
           visible: const Value(true),
         ),
       );
 
   ///delete todays entry
-  Future deleteHabitDetails(int id) {
+  Future deleteHabitDetails(int id, DateTime date) {
     // delete the oldest nine tasks
     return (delete(habitDetails)
-          ..where((t) => t.id.equals(id))
-          ..where((row) {
-            final rd = row.date;
-            final today = DateTime.now();
-            return rd.year.equals(today.year) &
-                rd.month.equals(today.month) &
-                rd.day.equals(today.day);
-          }))
+          ..where((t) => t.habitId.equals(id))
+          ..where((row) =>
+              row.date.isBetweenValues(minToday(date), maxToday(date))))
         .go();
   }
 
   ///todays habit completed
-  Future<HabitDetail> isTodayCompleted(int id, DateTime date) async {
+  Future<HabitDetail?> isTodayCompleted(int id, DateTime date) async {
     return (select(habitDetails)
-          ..where((row) => row.id.equals(id))
-          ..where((row) {
-            final rd = row.date;
-            return rd.year.equals(date.year) &
-                rd.month.equals(date.month) &
-                rd.day.equals(date.day);
-          }))
-        .getSingle();
+          ..where(
+              (row) => row.date.isBetweenValues(minToday(date), maxToday(date)))
+          ..where((row) => row.habitId.equals(id)))
+        .getSingleOrNull();
   }
 
   ///queries for graph
-  Future<List<HabitData>> getHabits(DateTime date) async {
-    return (select(habit)..where((row) => row.visible.equals(true))
-        // ..where((row) {
-        //   final rd = row.date;
-        //   return rd.year.equals(date.year) &
-        //       rd.month.equals(date.month) &
-        //       rd.day.equals(date.day);
-        // })
-        )
+  Future<List<HabitData>> getHabits() async {
+    return (select(habit)..where((row) => row.visible.equals(true)))
+        // ..where((row) => row.date.isBetweenValues(minToday, maxToday)))
+
         .get();
   }
+
+  ///count number of habits
+  Future<List<HabitData>> countOfHabit() {
+    return (select(habit)..where((row) => row.visible.equals(true)))
+        // ..where((row) => row.date.isBetweenValues(minToday, maxToday)))
+        .get();
+  }
+
+  ///count number of habits
+  Future<List<HabitDetail>> countOfHabitInWeek(
+      int habitId, DateTime start, DateTime end) async {
+    return (select(habitDetails)
+          ..where((row) => row.visible.equals(true))
+          ..where((row) => row.habitId.equals(habitId))
+          ..where((row) => row.date.isBetweenValues(start, end)))
+        .get();
+  }
+
+  DateTime minToday(DateTime date) => DateTime.parse(
+      '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')} 00:00:00');
+  DateTime maxToday(DateTime date) => DateTime.parse(
+      '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')} 23:59:59');
 }
 
 LazyDatabase _openConnection() {
