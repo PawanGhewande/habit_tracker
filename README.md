@@ -7,5 +7,5 @@ State management done with Provider.
 Flutter : 2.8.1v (Stable Channel)
 
 ##Screenshots
-![App Screen](/screenshots/app_screen.jpg "App Screen")
+![App Screen](screenshots/app_screen.png "App Screen")
 
