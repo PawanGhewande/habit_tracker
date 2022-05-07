@@ -74,51 +74,42 @@ class DashboardView extends StatelessWidget {
                             scrollDirection: Axis.horizontal,
                             itemCount: snapshot.data?.length,
                             itemBuilder: (BuildContext context, int index) {
-                              return InkWell(
-                                onTap: () {
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (_) => const HabitDetailsView(),
+                              return SizedBox(
+                                width: 165,
+                                child: Card(
+                                  elevation: 0,
+                                  margin: const EdgeInsets.all(8),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(
+                                      12,
                                     ),
-                                  );
-                                },
-                                child: SizedBox(
-                                  width: 165,
-                                  child: Card(
-                                    elevation: 0,
-                                    margin: const EdgeInsets.all(8),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(
-                                        12,
-                                      ),
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 9.0),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceEvenly,
-                                        children: <Widget>[
-                                          Text(
-                                            '${snapshot.data?[index].name.substring(0, 2)}',
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .headline4
-                                                ?.apply(
-                                                  fontWeightDelta: 1,
-                                                  color: Colors.black87,
-                                                ),
-                                          ),
-                                          Text(
-                                            '${snapshot.data?[index].name}',
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .subtitle2,
-                                          ),
-                                        ],
-                                      ),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 9.0),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: <Widget>[
+                                        Text(
+                                          '${snapshot.data?[index].name.substring(0, 2)}',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .headline4
+                                              ?.apply(
+                                                fontWeightDelta: 1,
+                                                color: Colors.black87,
+                                              ),
+                                        ),
+                                        Text(
+                                          '${snapshot.data?[index].name}',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .subtitle2,
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ),
@@ -144,76 +135,66 @@ class DashboardView extends StatelessWidget {
                   )
                 else
                   Expanded(
-                      child: FutureBuilder<List<HabitData>>(
-                          future: controller.getHabits(),
-                          builder: (BuildContext context,
-                              AsyncSnapshot<List<HabitData>> snapshot) {
-                            if (snapshot.hasData) {
-                              if (snapshot.data!.isEmpty) {
-                                return const Center(
-                                  child: Text("Start by adding new habit."),
-                                );
-                              }
-                              return Column(
-                                children: [
-                                  Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(12),
-                                      child: RichText(
-                                        text: TextSpan(
-                                          text: 'Your Habits ',
+                    child: FutureBuilder<List<HabitData>>(
+                      future: controller.getHabits(),
+                      builder: (BuildContext context,
+                          AsyncSnapshot<List<HabitData>> snapshot) {
+                        if (snapshot.hasData) {
+                          if (snapshot.data!.isEmpty) {
+                            return const Center(
+                              child: Text("Start by adding new habit."),
+                            );
+                          }
+                          return Column(
+                            children: [
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(12),
+                                  child: RichText(
+                                    text: TextSpan(
+                                      text: 'Your Habits ',
+                                      style:
+                                          Theme.of(context).textTheme.headline6,
+                                      children: <TextSpan>[
+                                        TextSpan(
+                                          text: ' ${snapshot.data?.length}',
                                           style: Theme.of(context)
                                               .textTheme
-                                              .headline6,
-                                          children: <TextSpan>[
-                                            TextSpan(
-                                              text: ' ${snapshot.data?.length}',
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .subtitle1
-                                                  ?.apply(
-                                                      color: Colors.grey,
-                                                      fontSizeFactor: 1.2),
-                                            ),
-                                          ],
+                                              .subtitle1
+                                              ?.apply(
+                                                  color: Colors.grey,
+                                                  fontSizeFactor: 1.2),
                                         ),
-                                      ),
+                                      ],
                                     ),
                                   ),
-                                  Expanded(
-                                    child: ListView.builder(
-                                      itemCount: snapshot.data?.length,
-                                      itemBuilder:
-                                          (BuildContext context, int index) {
-                                        return InkWell(
-                                          onTap: () {
-                                            Navigator.of(context).push(
-                                              MaterialPageRoute(
-                                                builder: (_) =>
-                                                    const HabitDetailsView(),
-                                              ),
-                                            );
-                                          },
-                                          child: HabitListTitle(
-                                            key: GlobalKey(),
-                                            color: controller.randomColor ??
-                                                Colors.red,
-                                            habit: snapshot.data![index],
-                                            selectedDate:
-                                                controller.selectedDate,
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                  ),
-                                ],
-                              );
-                            } else if (snapshot.hasError) {}
-                            return const Center(
-                              child: CircularProgressIndicator(),
-                            );
-                          }))
+                                ),
+                              ),
+                              Expanded(
+                                child: ListView.builder(
+                                  itemCount: snapshot.data?.length,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    return HabitListTitle(
+                                      key: GlobalKey(),
+                                      color:
+                                          controller.randomColor ?? Colors.red,
+                                      habit: snapshot.data![index],
+                                      selectedDate: controller.selectedDate,
+                                    );
+                                  },
+                                ),
+                              ),
+                            ],
+                          );
+                        } else if (snapshot.hasError) {}
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      },
+                    ),
+                  )
               ],
             ),
           ),

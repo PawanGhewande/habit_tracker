@@ -92,6 +92,12 @@ class LocalStorage extends _$LocalStorage {
         .get();
   }
 
+  ///count number of habits
+  Future<List<HabitDetail>> totalCompletedDayCount(int habitId) {
+    return (select(habitDetails)..where((row) => row.visible.equals(true))
+      ..where((row) => row.habitId.equals(habitId))).get();
+  }
+
   DateTime minToday(DateTime date) => DateTime.parse(
       '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')} 00:00:00');
   DateTime maxToday(DateTime date) => DateTime.parse(
