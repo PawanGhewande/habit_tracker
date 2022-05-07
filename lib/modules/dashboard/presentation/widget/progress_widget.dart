@@ -23,6 +23,7 @@ class CustomerProgressWidget extends CustomPainter {
 
   @override
   bool shouldRepaint(CustomPainter oldDelegate) {
+    // print('${oldDelegate != this}');
     return oldDelegate != this;
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:habit_tracker/modules/dashboard/presentation/logic/dashboard_controller.dart';
 import 'package:habit_tracker/repository/local_storage.dart';
 import 'package:habit_tracker/utility/day_calc.dart';
 import 'package:provider/provider.dart';
@@ -10,7 +11,7 @@ class HabitListTitleController extends ChangeNotifier {
   final BuildContext context;
   final HabitData habit;
   int countOfCompleteInWeek = 0;
-  final DateTime selectedDate;
+  DateTime selectedDate;
 
   ///Constructor
   HabitListTitleController(
@@ -33,6 +34,17 @@ class HabitListTitleController extends ChangeNotifier {
     });
   }
 
+  init() async {
+    HabitDetail? habitDetail =
+        await _storage.isTodayCompleted(habit.id, selectedDate);
+    todayCompleted = (habitDetail != null);
+    countOfCompleteInWeek = (await _storage.countOfHabitInWeek(habit.id,
+            DateUtils.weekStart(selectedDate), DateUtils.weekEnd(selectedDate)))
+        .length;
+    print(selectedDate.toIso8601String());
+    notifyListeners();
+  }
+
   ontap() async {
     todayCompleted = !todayCompleted;
     if (todayCompleted) {
@@ -41,5 +53,11 @@ class HabitListTitleController extends ChangeNotifier {
       await _storage.deleteHabitDetails(habit.id, selectedDate);
     }
     notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
   }
 }

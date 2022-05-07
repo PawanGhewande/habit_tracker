@@ -133,80 +133,87 @@ class DashboardView extends StatelessWidget {
                 ),
                 DatePicker(
                   DateTime.now(),
-                  initialSelectedDate: controller.selectedDate,
+                  initialSelectedDate: DateTime.now(),
                   selectionColor: Colors.black,
                   selectedTextColor: Colors.white,
-                  onDateChange: (date) => controller.onChange(date),
+                  onDateChange: controller.onChange,
                 ),
-                Expanded(
-                    child: FutureBuilder<List<HabitData>>(
-                        future: controller.getHabits(),
-                        builder: (BuildContext context,
-                            AsyncSnapshot<List<HabitData>> snapshot) {
-                          if (snapshot.hasData) {
-                            if (snapshot.data!.isEmpty) {
-                              return const Center(
-                                child: Text("Start by adding new habit."),
-                              );
-                            }
-                            return Column(
-                              children: [
-                                Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(12),
-                                    child: RichText(
-                                      text: TextSpan(
-                                        text: 'Your Habits ',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headline6,
-                                        children: <TextSpan>[
-                                          TextSpan(
-                                            text: ' ${snapshot.data?.length}',
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .subtitle1
-                                                ?.apply(
-                                                    color: Colors.grey,
-                                                    fontSizeFactor: 1.2),
-                                          ),
-                                        ],
+                if (controller.selectedDate == null)
+                  const Center(
+                    child: Text("Please select Date"),
+                  )
+                else
+                  Expanded(
+                      child: FutureBuilder<List<HabitData>>(
+                          future: controller.getHabits(),
+                          builder: (BuildContext context,
+                              AsyncSnapshot<List<HabitData>> snapshot) {
+                            if (snapshot.hasData) {
+                              if (snapshot.data!.isEmpty) {
+                                return const Center(
+                                  child: Text("Start by adding new habit."),
+                                );
+                              }
+                              return Column(
+                                children: [
+                                  Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(12),
+                                      child: RichText(
+                                        text: TextSpan(
+                                          text: 'Your Habits ',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .headline6,
+                                          children: <TextSpan>[
+                                            TextSpan(
+                                              text: ' ${snapshot.data?.length}',
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .subtitle1
+                                                  ?.apply(
+                                                      color: Colors.grey,
+                                                      fontSizeFactor: 1.2),
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                                Expanded(
-                                  child: ListView.builder(
-                                    itemCount: snapshot.data?.length,
-                                    itemBuilder:
-                                        (BuildContext context, int index) {
-                                      return InkWell(
-                                        onTap: () {
-                                          Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                              builder: (_) =>
-                                                  const HabitDetailsView(),
-                                            ),
-                                          );
-                                        },
-                                        child: HabitListTitle(
-                                          selectedDate: controller.selectedDate,
-                                          color: controller.randomColor ??
-                                              Colors.red,
-                                          habit: snapshot.data![index],
-                                        ),
-                                      );
-                                    },
+                                  Expanded(
+                                    child: ListView.builder(
+                                      itemCount: snapshot.data?.length,
+                                      itemBuilder:
+                                          (BuildContext context, int index) {
+                                        return InkWell(
+                                          onTap: () {
+                                            Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                builder: (_) =>
+                                                    const HabitDetailsView(),
+                                              ),
+                                            );
+                                          },
+                                          child: HabitListTitle(
+                                            key: GlobalKey(),
+                                            color: controller.randomColor ??
+                                                Colors.red,
+                                            habit: snapshot.data![index],
+                                            selectedDate:
+                                                controller.selectedDate!,
+                                          ),
+                                        );
+                                      },
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              );
+                            } else if (snapshot.hasError) {}
+                            return const Center(
+                              child: CircularProgressIndicator(),
                             );
-                          } else if (snapshot.hasError) {}
-                          return const Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        }))
+                          }))
               ],
             ),
           ),
