@@ -20,7 +20,7 @@ class HabitListTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (_) => HabitListTitleController(
-        context: _,
+        context: context,
         habit: habit,
         selectedDate: selectedDate,
       ),

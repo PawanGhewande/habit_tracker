@@ -201,7 +201,7 @@ class DashboardView extends StatelessWidget {
                                                 Colors.red,
                                             habit: snapshot.data![index],
                                             selectedDate:
-                                                controller.selectedDate!,
+                                                controller.selectedDate,
                                           ),
                                         );
                                       },

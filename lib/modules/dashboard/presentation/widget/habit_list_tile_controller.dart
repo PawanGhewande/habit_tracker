@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:habit_tracker/modules/dashboard/presentation/logic/dashboard_controller.dart';
 import 'package:habit_tracker/repository/local_storage.dart';
 import 'package:habit_tracker/utility/day_calc.dart';
 import 'package:provider/provider.dart';
@@ -12,6 +11,7 @@ class HabitListTitleController extends ChangeNotifier {
   final HabitData habit;
   int countOfCompleteInWeek = 0;
   DateTime selectedDate;
+  late final Future<void> future;
 
   ///Constructor
   HabitListTitleController(
@@ -21,29 +21,31 @@ class HabitListTitleController extends ChangeNotifier {
     _storage = Provider.of<LocalStorage>(context, listen: false);
 
     ///init
-    Future.delayed(Duration.zero, () async {
-      HabitDetail? habitDetail =
-          await _storage.isTodayCompleted(habit.id, selectedDate);
-      todayCompleted = (habitDetail != null);
-      countOfCompleteInWeek = (await _storage.countOfHabitInWeek(
-              habit.id,
-              DateUtils.weekStart(selectedDate),
-              DateUtils.weekEnd(selectedDate)))
-          .length;
-      notifyListeners();
-    });
+    try {
+      future = Future.delayed(Duration.zero, () async {
+        HabitDetail? habitDetail =
+            await _storage.isTodayCompleted(habit.id, selectedDate);
+        todayCompleted = (habitDetail != null);
+        countOfCompleteInWeek = (await _storage.countOfHabitInWeek(
+                habit.id,
+                DateUtils.weekStart(selectedDate),
+                DateUtils.weekEnd(selectedDate)))
+            .length;
+        notifyListeners();
+      });
+    } catch (e) {}
   }
 
-  init() async {
-    HabitDetail? habitDetail =
-        await _storage.isTodayCompleted(habit.id, selectedDate);
-    todayCompleted = (habitDetail != null);
-    countOfCompleteInWeek = (await _storage.countOfHabitInWeek(habit.id,
-            DateUtils.weekStart(selectedDate), DateUtils.weekEnd(selectedDate)))
-        .length;
-    print(selectedDate.toIso8601String());
-    notifyListeners();
-  }
+  // init() async {
+  //   HabitDetail? habitDetail =
+  //       await _storage.isTodayCompleted(habit.id, selectedDate);
+  //   todayCompleted = (habitDetail != null);
+  //   countOfCompleteInWeek = (await _storage.countOfHabitInWeek(habit.id,
+  //           DateUtils.weekStart(selectedDate), DateUtils.weekEnd(selectedDate)))
+  //       .length;
+  //   print(selectedDate.toIso8601String());
+  //   notifyListeners();
+  // }
 
   ontap() async {
     todayCompleted = !todayCompleted;
@@ -57,7 +59,7 @@ class HabitListTitleController extends ChangeNotifier {
 
   @override
   void dispose() {
-    // TODO: implement dispose
+    future.ignore();
     super.dispose();
   }
 }

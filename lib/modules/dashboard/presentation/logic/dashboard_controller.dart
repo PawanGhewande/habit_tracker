@@ -11,7 +11,7 @@ class DashboardController extends ChangeNotifier {
   BuildContext context;
   int countOfHabits = 0;
 
-  DateTime? selectedDate;
+  DateTime selectedDate = DateTime.now();
 
   DashboardController(this.context) {
     _storage = Provider.of<LocalStorage>(context, listen: false);
